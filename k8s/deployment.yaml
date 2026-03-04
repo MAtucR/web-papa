@@ -1,20 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-papa-deploy     # Nombre estandarizado
+  name: web-papa-deploy
   namespace: civil-web
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: web-papa         # Esta es la "llave"
+      app: web-papa
   template:
     metadata:
       labels:
         app: web-papa
     spec:
+      # ESTO ES LO QUE FALTABA SI TU REPO ES PRIVADO (OPCIONAL PERO RECOMENDADO)
+      imagePullSecrets:
+        - name: ghcr-auth 
       containers:
         - name: web-papa-container
-          image: ghcr.io/matucr/web-papa:latest  # Tu imagen real
+          image: ghcr.io/matucr/web-papa:latest
+          imagePullPolicy: Always  # Forzamos a que siempre busque la última versión al bootear
           ports:
             - containerPort: 80
+          # AGREGAMOS ESTO PARA QUE NGINX TENGA RECURSOS ASIGNADOS
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
