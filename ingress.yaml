@@ -31,7 +31,7 @@ spec:
   #     secretName: civil-web-tls
 
   rules:
-    - host: obras.tudominio.com.ar    # ⚠️  Replace with your real domain
+    - host: cloudtucu.duckdns.org    # ⚠️  Replace with your real domain
       http:
         paths:
           - path: /
