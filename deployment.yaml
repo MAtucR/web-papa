@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: civil-engineer-web
+  name: web-papa-deploy
   namespace: civil-web
   labels:
     app: civil-engineer-web
@@ -10,7 +10,7 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: civil-engineer-web
+      app: web-papa
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -19,7 +19,7 @@ spec:
   template:
     metadata:
       labels:
-        app: civil-engineer-web
+        app: web-papa
         version: "1.0.0"
     spec:
       # ── Security context ──────────────────────────────────────────────────
