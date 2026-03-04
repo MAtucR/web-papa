@@ -13,9 +13,8 @@ spec:
       labels:
         app: web-papa
     spec:
-      # Si la imagen sigue privada, acá va el secreto que creamos por terminal
-      # imagePullSecrets:
-      #   - name: ghcr-auth
+      imagePullSecrets:
+        - name: ghcr-auth
       containers:
         - name: web-papa-container
           image: ghcr.io/matucr/web-papa:latest
