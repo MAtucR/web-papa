@@ -28,7 +28,6 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
-          # Liveness probe para que K8s sepa si el Nginx se colgó
           livenessProbe:
             httpGet:
               path: /
