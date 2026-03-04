@@ -32,7 +32,7 @@ spec:
         - name: civil-engineer-web
           # ⚠️  Replace with your Docker Hub / registry image
           # e.g.  ghcr.io/<your-user>/civil-engineer-web:latest
-          image: ghcr.io/MAtucR/civil-engineer-web:latest
+          image: ghcr.io/MAtucR/web-papa:latest
           imagePullPolicy: Always
 
           ports:
