@@ -10,7 +10,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: civil-engineer-web
+  name: web-papa-ingress
   namespace: civil-web
   labels:
     app: civil-engineer-web
