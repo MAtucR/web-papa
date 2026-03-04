@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: civil-engineer-web
+  name: web-papa-service
   namespace: civil-web
   labels:
     app: civil-engineer-web
 spec:
   type: ClusterIP
   selector:
-    app: civil-engineer-web
+    app: web-papa
   ports:
     - name: http
       port: 80
