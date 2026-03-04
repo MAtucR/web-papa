@@ -1,55 +1,20 @@
-# k3s ships with Traefik as the default ingress controller.
-# This manifest uses the standard networking.k8s.io/v1 Ingress,
-# which Traefik picks up automatically.
-#
-# ── TLS (optional but recommended) ──────────────────────────────────────────
-# Uncomment the tls block and add a cert-manager ClusterIssuer for Let's Encrypt.
-# Install cert-manager:  kubectl apply -f https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml
-# ─────────────────────────────────────────────────────────────────────────────
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: web-papa-ingress
   namespace: civil-web
-  labels:
-    app: civil-engineer-web
   annotations:
-    # Traefik-specific annotations
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: civil-web-redirect-https@kubernetescrd
-
-    # ── Uncomment for Let's Encrypt TLS via cert-manager ──────────────────
-    # cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   ingressClassName: traefik
-
-  # ── Uncomment & configure when TLS is ready ───────────────────────────────
-  # tls:
-  #   - hosts:
-  #       - obras.tudominio.com.ar
-  #     secretName: civil-web-tls
-
   rules:
-    - host: cloudtucu.duckdns.org    # ⚠️  Replace with your real domain
+    - host: cloudtucu.duckdns.org
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: web-papa-service
+                name: web-papa-service  # TIENE QUE SER IGUAL AL NAME DEL SERVICE
                 port:
                   number: 80
-
----
-# ── HTTPS redirect middleware (Traefik CRD) ───────────────────────────────────
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: redirect-https
-  namespace: civil-web
-spec:
-  redirectScheme:
-    scheme: https
-    permanent: true
