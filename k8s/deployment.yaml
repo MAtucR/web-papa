@@ -13,16 +13,15 @@ spec:
       labels:
         app: web-papa
     spec:
-      # ESTO ES LO QUE FALTABA SI TU REPO ES PRIVADO (OPCIONAL PERO RECOMENDADO)
-      imagePullSecrets:
-        - name: ghcr-auth 
+      # Si la imagen sigue privada, acá va el secreto que creamos por terminal
+      # imagePullSecrets:
+      #   - name: ghcr-auth
       containers:
         - name: web-papa-container
           image: ghcr.io/matucr/web-papa:latest
-          imagePullPolicy: Always  # Forzamos a que siempre busque la última versión al bootear
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
-          # AGREGAMOS ESTO PARA QUE NGINX TENGA RECURSOS ASIGNADOS
           resources:
             requests:
               cpu: "50m"
@@ -30,3 +29,10 @@ spec:
             limits:
               cpu: "200m"
               memory: "128Mi"
+          # Liveness probe para que K8s sepa si el Nginx se colgó
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
