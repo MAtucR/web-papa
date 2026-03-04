@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: civil-engineer-web
+  namespace: civil-web
+  labels:
+    app: civil-engineer-web
+    version: "1.0.0"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: civil-engineer-web
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0          # zero-downtime deploys
+  template:
+    metadata:
+      labels:
+        app: civil-engineer-web
+        version: "1.0.0"
+    spec:
+      # ── Security context ──────────────────────────────────────────────────
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101            # nginx user in alpine image
+        fsGroup: 101
+
+      containers:
+        - name: civil-engineer-web
+          # ⚠️  Replace with your Docker Hub / registry image
+          # e.g.  ghcr.io/<your-user>/civil-engineer-web:latest
+          image: ghcr.io/YOUR_GITHUB_USER/civil-engineer-web:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 80
+              name: http
+
+          # ── Resource limits ───────────────────────────────────────────────
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+
+          # ── Health probes ─────────────────────────────────────────────────
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          # ── Security ──────────────────────────────────────────────────────
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false   # nginx writes tmp files
+            capabilities:
+              drop: ["ALL"]
+              add: ["NET_BIND_SERVICE"]

@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Construcciones Rodríguez — Ingeniería Civil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300&family=Barlow+Condensed:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black:   #0a0a0a;
+      --offwhite: #f0ede6;
+      --cement:  #8a8075;
+      --steel:   #2c3e50;
+      --amber:   #f5a623;
+      --rust:    #c0392b;
+      --light-cement: #d4cfc6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--offwhite);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: .5;
+    }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      border-bottom: 1px solid rgba(240,237,230,.08);
+      backdrop-filter: blur(12px);
+      background: rgba(10,10,10,.6);
+      transition: background .3s;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: .12em;
+      color: var(--amber);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--light-cement);
+      text-decoration: none;
+      position: relative;
+      transition: color .3s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--amber);
+      transition: width .3s;
+    }
+
+    .nav-links a:hover { color: var(--offwhite); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 3rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tag {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp .6s ease forwards .2s;
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 10vw, 10rem);
+      line-height: .92;
+      letter-spacing: .02em;
+      color: var(--offwhite);
+      opacity: 0;
+      animation: fadeUp .7s ease forwards .4s;
+    }
+
+    .hero-title span { color: var(--amber); display: block; }
+
+    .hero-sub {
+      margin-top: 2rem;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--cement);
+      max-width: 380px;
+      opacity: 0;
+      animation: fadeUp .7s ease forwards .6s;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1.2rem;
+      opacity: 0;
+      animation: fadeUp .7s ease forwards .8s;
+    }
+
+    .btn-primary {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .85rem 2.2rem;
+      background: var(--amber);
+      color: var(--black);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .3s, transform .2s;
+    }
+    .btn-primary:hover { background: #ffc04d; transform: translateY(-2px); }
+
+    .btn-outline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .85rem 2.2rem;
+      background: transparent;
+      color: var(--offwhite);
+      border: 1px solid rgba(240,237,230,.3);
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .3s, transform .2s;
+    }
+    .btn-outline:hover { border-color: var(--offwhite); transform: translateY(-2px); }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(60%) contrast(1.1);
+      opacity: .45;
+      transform: scale(1.04);
+      animation: zoomOut 8s ease forwards;
+    }
+
+    /* Diagonal overlay */
+    .hero-right::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, var(--black) 0%, transparent 50%);
+      z-index: 1;
+    }
+
+    /* Amber line accent */
+    .hero-right::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--amber);
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.2s;
+    }
+
+    .hero-stats {
+      position: absolute;
+      bottom: 3rem; right: 3rem;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      opacity: 0;
+      animation: fadeIn .8s ease forwards 1.4s;
+    }
+
+    .stat {
+      text-align: right;
+      border-right: 2px solid var(--amber);
+      padding-right: 1rem;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.8rem;
+      color: var(--offwhite);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cement);
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--amber), transparent);
+      margin: 0 3rem;
+      opacity: .4;
+    }
+
+    /* ─── SERVICES ─── */
+    #servicios {
+      padding: 7rem 3rem;
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      gap: 2rem;
+      margin-bottom: 5rem;
+    }
+
+    .section-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem;
+      color: var(--amber);
+      opacity: .25;
+      line-height: 1;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      letter-spacing: .04em;
+      line-height: 1;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(240,237,230,.06);
+    }
+
+    .service-card {
+      background: var(--black);
+      padding: 3rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--amber);
+      transition: width .5s ease;
+    }
+
+    .service-card:hover { background: #111; }
+    .service-card:hover::before { width: 100%; }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .service-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--offwhite);
+      margin-bottom: 1rem;
+    }
+
+    .service-desc {
+      font-size: .9rem;
+      line-height: 1.75;
+      color: var(--cement);
+    }
+
+    /* ─── PROYECTOS ─── */
+    #proyectos {
+      padding: 7rem 3rem;
+      background: #0e0e0e;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: 320px 320px;
+      gap: 8px;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .project-card:first-child {
+      grid-row: 1 / 3;
+    }
+
+    .project-bg {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(70%);
+      transition: filter .5s, transform .5s;
+    }
+
+    .project-card:hover .project-bg {
+      filter: grayscale(30%);
+      transform: scale(1.04);
+    }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,.9) 0%, transparent 60%);
+      transition: background .3s;
+    }
+
+    .project-card:hover .project-overlay {
+      background: linear-gradient(to top, rgba(10,10,10,.95) 0%, rgba(10,10,10,.3) 60%);
+    }
+
+    .project-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+    }
+
+    .project-type {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .7rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: .5rem;
+    }
+
+    .project-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: .05em;
+    }
+
+    .project-year {
+      font-size: .8rem;
+      color: var(--cement);
+      margin-top: .3rem;
+    }
+
+    /* ─── NOSOTROS ─── */
+    #nosotros {
+      padding: 7rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .about-text .section-header { margin-bottom: 2.5rem; }
+
+    .about-body {
+      font-size: 1rem;
+      line-height: 1.85;
+      color: var(--cement);
+      margin-bottom: 1.5rem;
+    }
+
+    .about-highlight {
+      font-family: 'Barlow', sans-serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--offwhite);
+      border-left: 3px solid var(--amber);
+      padding-left: 1.5rem;
+      margin: 2.5rem 0;
+      line-height: 1.6;
+    }
+
+    .about-img {
+      position: relative;
+    }
+
+    .about-img img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      filter: grayscale(50%);
+    }
+
+    .about-img::before {
+      content: '';
+      position: absolute;
+      top: -12px; left: -12px;
+      right: 12px; bottom: 12px;
+      border: 1px solid var(--amber);
+      z-index: -1;
+      opacity: .4;
+    }
+
+    /* ─── PROCESO ─── */
+    #proceso {
+      padding: 7rem 3rem;
+      background: #0e0e0e;
+    }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      position: relative;
+    }
+
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 2rem; left: 2.5rem; right: 2.5rem;
+      height: 1px;
+      background: linear-gradient(90deg, var(--amber), transparent);
+      opacity: .3;
+    }
+
+    .step {
+      padding: 2rem 2rem 2rem 0;
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 4rem;
+      color: var(--amber);
+      opacity: .2;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .step-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--offwhite);
+      margin-bottom: .75rem;
+    }
+
+    .step-desc {
+      font-size: .875rem;
+      line-height: 1.7;
+      color: var(--cement);
+    }
+
+    /* ─── CONTACTO ─── */
+    #contacto {
+      padding: 7rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+    }
+
+    .contact-info h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      line-height: .95;
+      margin-bottom: 2rem;
+    }
+
+    .contact-info h2 em {
+      font-style: normal;
+      color: var(--amber);
+    }
+
+    .contact-detail {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(240,237,230,.08);
+    }
+
+    .contact-icon { font-size: 1.2rem; margin-top: .1rem; }
+
+    .contact-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .7rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: .25rem;
+    }
+
+    .contact-value {
+      font-size: .95rem;
+      color: var(--light-cement);
+    }
+
+    /* Contact form */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .form-group label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--cement);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: rgba(240,237,230,.04);
+      border: 1px solid rgba(240,237,230,.12);
+      color: var(--offwhite);
+      padding: .9rem 1.2rem;
+      font-family: 'Barlow', sans-serif;
+      font-size: .95rem;
+      outline: none;
+      transition: border-color .3s;
+      resize: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--amber);
+    }
+
+    .form-group select option { background: #1a1a1a; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .submit-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .9rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 1rem 2rem;
+      background: var(--amber);
+      color: var(--black);
+      border: none;
+      cursor: pointer;
+      transition: background .3s, transform .2s;
+      align-self: flex-start;
+    }
+
+    .submit-btn:hover { background: #ffc04d; transform: translateY(-2px); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(240,237,230,.08);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .12em;
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: .75rem;
+      color: var(--cement);
+      letter-spacing: .05em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--cement);
+      text-decoration: none;
+      transition: color .3s;
+    }
+
+    .footer-links a:hover { color: var(--amber); }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes zoomOut {
+      from { transform: scale(1.08); }
+      to   { transform: scale(1); }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 8rem 1.5rem 5rem; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.2rem; }
+      #servicios, #proyectos, #nosotros, #proceso, #contacto { padding: 5rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .projects-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .project-card:first-child { grid-row: auto; }
+      .project-card { height: 260px; }
+      #nosotros { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img { display: none; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
+      #contacto { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">CR / Ingeniería</a>
+    <ul class="nav-links">
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#proceso">Proceso</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-left">
+      <p class="hero-tag">Ingeniería Civil · Buenos Aires · Desde 1998</p>
+      <h1 class="hero-title">
+        Construimos<br>
+        <span>lo que</span>
+        perdura.
+      </h1>
+      <p class="hero-sub">
+        Dirección técnica, proyecto y ejecución de obras civiles de alta complejidad. 
+        Comprometidos con la calidad estructural y los plazos acordados.
+      </p>
+      <div class="hero-cta">
+        <a href="#proyectos" class="btn-primary">Ver proyectos</a>
+        <a href="#contacto" class="btn-outline">Consultar obra</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200&q=80" alt="Obra civil en construcción" />
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">+120</div>
+          <div class="stat-label">Obras ejecutadas</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">26</div>
+          <div class="stat-label">Años de experiencia</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">98%</div>
+          <div class="stat-label">Satisfacción de clientes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SERVICIOS -->
+  <section id="servicios">
+    <div class="section-header reveal">
+      <div class="section-num">01</div>
+      <h2 class="section-title">Nuestros<br>Servicios</h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-icon">🏗️</span>
+        <div class="service-name">Construcción estructural</div>
+        <p class="service-desc">Ejecución de estructuras de hormigón armado, steel frame y mixtas para edificios residenciales, comerciales e industriales.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">📐</span>
+        <div class="service-name">Proyecto & Dirección</div>
+        <p class="service-desc">Dirección técnica de obra, gestión de subcontratistas, control de avance y certificación. Representación técnica ante organismos.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">🏢</span>
+        <div class="service-name">Edificios residenciales</div>
+        <p class="service-desc">Viviendas unifamiliares, duplex, edificios de propiedad horizontal y countries. Supervisión integral desde excavación a entrega.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">🏭</span>
+        <div class="service-name">Obras industriales</div>
+        <p class="service-desc">Galpones, plantas de producción, depósitos logísticos y edificios de uso mixto. Optimización de tiempos y costos de construcción.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">🛣️</span>
+        <div class="service-name">Infraestructura vial</div>
+        <p class="service-desc">Pavimentación, calzadas, veredas, cordones cuneta y obras de urbanización. Trabajos con municipios y entes provinciales.</p>
+      </div>
+      <div class="service-card reveal">
+        <span class="service-icon">📊</span>
+        <div class="service-name">Cómputos & Presupuestos</div>
+        <p class="service-desc">Elaboración de cómputos métricos y presupuestos de obra detallados. Análisis de precios unitarios y seguimiento de variaciones.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section id="proyectos">
+    <div class="section-header reveal">
+      <div class="section-num">02</div>
+      <h2 class="section-title">Proyectos<br>Destacados</h2>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <img class="project-bg" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=80" alt="Edificio residencial" />
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-type">Edificio residencial</div>
+          <div class="project-name">Torre Palermo Norte</div>
+          <div class="project-year">Buenos Aires · 2023 · 14 pisos</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <img class="project-bg" src="https://images.unsplash.com/photo-1601597111158-2fceff292cdc?w=600&q=80" alt="Planta industrial" />
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-type">Industrial</div>
+          <div class="project-name">Planta Logística Pilar</div>
+          <div class="project-year">GBA Norte · 2022</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <img class="project-bg" src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?w=600&q=80" alt="Obra vial" />
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-type">Infraestructura</div>
+          <div class="project-name">Pavimento Ruta 6</div>
+          <div class="project-year">La Plata · 2022</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <img class="project-bg" src="https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=600&q=80" alt="Edificio comercial" />
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-type">Comercial</div>
+          <div class="project-name">Oficinas Microcentro</div>
+          <div class="project-year">CABA · 2023</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <img class="project-bg" src="https://images.unsplash.com/photo-1448630360428-65456885c650?w=600&q=80" alt="Vivienda country" />
+        <div class="project-overlay"></div>
+        <div class="project-info">
+          <div class="project-type">Residencial</div>
+          <div class="project-name">Barrio Privado Cardales</div>
+          <div class="project-year">Exaltación · 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section id="nosotros">
+    <div class="about-img reveal">
+      <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="El equipo en obra" />
+    </div>
+    <div class="about-text reveal">
+      <div class="section-header">
+        <div class="section-num">03</div>
+        <h2 class="section-title">Quiénes<br>Somos</h2>
+      </div>
+      <p class="about-body">
+        Somos un estudio de ingeniería civil con más de 26 años de trayectoria en el sector de la construcción. 
+        Trabajamos con empresas, inversores privados y organismos públicos en obras de distintas escalas y tipologías.
+      </p>
+      <blockquote class="about-highlight">
+        "Cada obra es un compromiso con el futuro. Construimos con rigor técnico, responsabilidad y respeto por los recursos."
+      </blockquote>
+      <p class="about-body">
+        Nuestro equipo está integrado por ingenieros civiles, arquitectos y técnicos especializados con formación continua 
+        y experiencia en las últimas tecnologías constructivas. Trabajamos bajo estrictos estándares de calidad y seguridad.
+      </p>
+      <a href="#contacto" class="btn-primary" style="margin-top:2rem; display:inline-block;">Hablar con el equipo</a>
+    </div>
+  </section>
+
+  <!-- PROCESO -->
+  <section id="proceso">
+    <div class="section-header reveal">
+      <div class="section-num">04</div>
+      <h2 class="section-title">Nuestro<br>Proceso</h2>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-name">Consulta inicial</div>
+        <p class="step-desc">Relevamiento del terreno, necesidades del cliente y análisis de factibilidad técnica y económica del proyecto.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-name">Proyecto ejecutivo</div>
+        <p class="step-desc">Elaboración de planos, memorias de cálculo, cómputos y presupuesto detallado. Tramitación de permisos municipales.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-name">Ejecución de obra</div>
+        <p class="step-desc">Dirección técnica diaria, control de calidad de materiales, coordinación de gremios y cumplimiento de plazos.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-name">Entrega & certificación</div>
+        <p class="step-desc">Entrega con documentación as-built, planos conforme a obra y gestión de habilitaciones finales ante organismos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <div class="contact-info reveal">
+      <h2>Hablemos de<br>tu <em>próxima</em><br>obra.</h2>
+      <div class="contact-detail">
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <div>
+            <div class="contact-label">Oficina</div>
+            <div class="contact-value">Av. Corrientes 1234, piso 8 — CABA, Argentina</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <div>
+            <div class="contact-label">Teléfono</div>
+            <div class="contact-value">+54 11 4567-8900</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <div>
+            <div class="contact-label">Email</div>
+            <div class="contact-value">obras@ingenieria-cr.com.ar</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">🕐</span>
+          <div>
+            <div class="contact-label">Horario de atención</div>
+            <div class="contact-value">Lun–Vie 8:00 a 18:00 hs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" placeholder="Juan García" />
+        </div>
+        <div class="form-group">
+          <label>Empresa / Razón social</label>
+          <input type="text" placeholder="Constructora XYZ S.A." />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email de contacto</label>
+        <input type="email" placeholder="juan@empresa.com" />
+      </div>
+      <div class="form-group">
+        <label>Tipo de obra</label>
+        <select>
+          <option value="" disabled selected>Seleccioná una opción</option>
+          <option>Edificio residencial</option>
+          <option>Edificio comercial</option>
+          <option>Obra industrial</option>
+          <option>Infraestructura vial</option>
+          <option>Vivienda unifamiliar</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Descripción del proyecto</label>
+        <textarea rows="5" placeholder="Contanos brevemente sobre tu obra: ubicación, superficie aproximada, plazo estimado..."></textarea>
+      </div>
+      <button class="submit-btn">Enviar consulta →</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">CR / Ingeniería Civil</div>
+    <div class="footer-copy">© 2024 Construcciones Rodríguez. Todos los derechos reservados.</div>
+    <div class="footer-links">
+      <a href="#hero">Inicio</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Nav background on scroll
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.style.background = window.scrollY > 60
+        ? 'rgba(10,10,10,0.95)'
+        : 'rgba(10,10,10,0.6)';
+    });
+
+    // Form submit
+    document.querySelector('.submit-btn').addEventListener('click', () => {
+      alert('✅ Consulta enviada. Nos contactaremos a la brevedad.');
+    });
+  </script>
+</body>
+</html>

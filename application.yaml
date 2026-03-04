@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: civil-engineer-web
+  namespace: argocd               # ArgoCD always lives in the argocd namespace
+  labels:
+    app: civil-engineer-web
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io   # cascade-delete on app removal
+spec:
+  project: default
+
+  # ── Source: your GitHub repo ──────────────────────────────────────────────
+  source:
+    repoURL: https://github.com/YOUR_GITHUB_USER/YOUR_REPO_NAME.git  # ⚠️  Replace
+    targetRevision: main          # branch / tag / commit SHA
+    path: k8s                     # folder inside the repo with manifests
+
+  # ── Destination: local k3s cluster ───────────────────────────────────────
+  destination:
+    server: https://kubernetes.default.svc   # in-cluster
+    namespace: civil-web
+
+  # ── Sync policy: GitOps auto-sync ────────────────────────────────────────
+  syncPolicy:
+    automated:
+      prune: true                 # delete resources removed from git
+      selfHeal: true              # revert manual cluster changes
+      allowEmpty: false
+    syncOptions:
+      - CreateNamespace=true      # auto-create namespace if missing
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  # ── Health / diff settings ────────────────────────────────────────────────
+  revisionHistoryLimit: 5

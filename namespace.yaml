@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: civil-web
+  labels:
+    app: civil-engineer-web
+    managed-by: argocd
